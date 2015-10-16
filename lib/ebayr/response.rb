@@ -2,6 +2,8 @@
 module Ebayr #:nodoc:
   # A response to an Ebayr::Request.
   class Response < Record
+    attr_reader :body
+
     def initialize(request, response)
       @request = request
       @command = @request.command if @request
