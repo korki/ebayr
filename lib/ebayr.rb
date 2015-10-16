@@ -81,9 +81,6 @@ module Ebayr
   mattr_accessor :debug
   self.debug = false
 
-  mattr_accessor :api_type
-  self.api_type = :trading
-
   # Gets either ebay.com/ws or sandbox.ebay.com/ws, as appropriate, with
   # "service" prepended. E.g.
   #
@@ -95,12 +92,7 @@ module Ebayr
 
   # Gets the URI used for API calls (as a URI object)
   def uri(*args)
-    case api_type
-    when :trading
-      URI::parse("#{uri_prefix(*args)}/api.dll")
-    when :return_management
-      URI::parse("https://svcs#{sandbox ? ".sandbox" : ""}.ebay.com/services/returns/v1/ReturnManagementService")
-    end
+    URI::parse("#{uri_prefix(*args)}/api.dll")
   end
 
   # Gets the URI for eBay authorization/login. The session_id should be obtained
@@ -139,12 +131,12 @@ module Ebayr
   #  To see a list of available calls, check out
   #  http://developer.ebay.com/DevZone/XML/docs/Reference/ebay/index.html
   def call(command, arguments = {})
-    api_type = :trading
     TradingRequest.new(command, arguments).send
   end
 
   def call_returns(command, arguments = {})
-    api_type = :return_management
+    uri = URI::parse("https://svcs#{sandbox ? ".sandbox" : ""}.ebay.com/services/returns/v1/ReturnManagementService")
+    arguments[:uri] = uri
     ReturnsRequest.new(command, arguments).send
   end
 

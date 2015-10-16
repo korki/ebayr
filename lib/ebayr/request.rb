@@ -19,49 +19,19 @@ module Ebayr #:nodoc:
       # Remaining options are converted and used as input to the call
       @input = options.delete(:input) || options
     end
-    
+
     def input_xml
       self.class.xml(@input)
     end
 
-    # Gets the path to which this request will be posted
-    def path
-      @uri.path
-    end
-
     # Gets the headers that will be sent with this request.
     def headers
-      {
-        'X-EBAY-API-COMPATIBILITY-LEVEL' => @compatability_level.to_s,
-        'X-EBAY-API-DEV-NAME' => dev_id.to_s,
-        'X-EBAY-API-APP-NAME' => app_id.to_s,
-        'X-EBAY-API-CERT-NAME' => cert_id.to_s,
-        'X-EBAY-API-CALL-NAME' => @command.to_s,
-        'X-EBAY-API-SITEID' => @site_id.to_s,
-        'Content-Type' => 'text/xml'
-      }
+      raise 'Implement me!'
     end
 
     # Gets the body of this request (which is XML)
     def body
-      <<-XML
-        <?xml version="1.0" encoding="utf-8"?>
-        <#{@command}Request xmlns="urn:ebay:apis:eBLBaseComponents">
-          #{requester_credentials_xml}
-          #{input_xml}
-        </#{@command}Request>
-      XML
-    end
-
-    # Returns eBay requester credential XML if @auth_token is present
-    def requester_credentials_xml
-      return "" unless @auth_token && !@auth_token.empty?
-
-      <<-XML
-      <RequesterCredentials>
-        <eBayAuthToken>#{@auth_token}</eBayAuthToken>
-      </RequesterCredentials>
-      XML
+      raise 'Implement me!'
     end
 
     # Makes a HTTP connection and sends the request, returning an

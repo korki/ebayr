@@ -17,12 +17,12 @@ module Ebayr #:nodoc:
 
     # Gets the body of this request (which is XML)
     def body
-      <<-XML
-        <?xml version="1.0" encoding="utf-8"?>
-        <#{@command}Request xmlns="http://www.ebay.com/marketplace/returns/v1/services">
-          #{input_xml}
-        </#{@command}Request>
-      XML
+<<-XML
+<?xml version="1.0" encoding="utf-8"?>
+<#{@command}Request xmlns="http://www.ebay.com/marketplace/returns/v1/services">
+#{input_xml}
+</#{@command}Request>
+XML
     end
   end
 end
