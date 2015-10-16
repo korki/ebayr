@@ -8,6 +8,8 @@ require 'active_support/core_ext/hash/conversions'
 module Ebayr
   autoload :Record,   File.expand_path('../ebayr/record', __FILE__)
   autoload :Request,  File.expand_path('../ebayr/request',  __FILE__)
+  autoload :TradingRequest,  File.expand_path('../ebayr/trading_request',  __FILE__)
+  autoload :ReturnsRequest,  File.expand_path('../ebayr/returns_request',  __FILE__)
   autoload :Response, File.expand_path('../ebayr/response', __FILE__)
   autoload :User,     File.expand_path('../ebayr/user',     __FILE__)
 
@@ -129,9 +131,14 @@ module Ebayr
   #  To see a list of available calls, check out
   #  http://developer.ebay.com/DevZone/XML/docs/Reference/ebay/index.html
   def call(command, arguments = {})
-    Request.new(command, arguments).send
+    TradingRequest.new(command, arguments).send
   end
 
+  def call_returns(command, arguments = {})
+    uri = URI::parse("https://svcs#{sandbox ? ".sandbox" : ""}.ebay.com/services/returns/v1/ReturnManagementService")
+    arguments[:uri] = uri
+    ReturnsRequest.new(command, arguments).send
+  end
 
   def self.included(mod)
     mod.extend(self)
